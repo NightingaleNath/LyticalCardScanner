@@ -21,10 +21,12 @@
     <application>
         <activity
             android:name=".NfcDetailsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/wocr_RecognizerTheme" />
         <activity
             android:name=".NfcReadActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/wocr_RecognizerTheme" />
         <activity
             android:name=".CreditCardScannerActivity"
             android:exported="false"

@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), SdkResultCallback {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        SdkActivityLauncher.callback = this
+        SdkActivityLauncher.setCallback(this)
 
         binding.scanButton.setOnClickListener {
             SdkActivityLauncher.launchActivity(this, SdkActivityType.CREDIT_CARD_SCANNER)
@@ -29,6 +29,12 @@ class MainActivity : AppCompatActivity(), SdkResultCallback {
         binding.nfcButton.setOnClickListener {
             SdkActivityLauncher.launchActivity(this, SdkActivityType.NFC_READER)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        SdkActivityLauncher.setCallback(null)
     }
 
     override fun onSdkResult(result: Bundle) {

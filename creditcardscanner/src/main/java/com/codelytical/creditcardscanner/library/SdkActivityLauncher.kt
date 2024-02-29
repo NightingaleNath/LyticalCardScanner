@@ -12,7 +12,11 @@ import com.codelytical.creditcardscanner.NfcReadActivity
 
 object SdkActivityLauncher {
 
-    var callback: SdkResultCallback? = null
+    private var callback: SdkResultCallback? = null
+
+    fun setCallback(listener: SdkResultCallback?) {
+        this.callback = listener
+    }
 
     @ExperimentalGetImage
     fun launchActivity(context: Context, activityType: SdkActivityType) {

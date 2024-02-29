@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import com.codelytical.creditcardscanner.databinding.ActivityNfcDetailsBinding
 import com.codelytical.creditcardscanner.library.SdkActivityLauncher
+import com.codelytical.creditcardscanner.utils.hideStatusBar
 
 class NfcDetailsActivity : AppCompatActivity() {
 
@@ -13,9 +14,9 @@ class NfcDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityNfcDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        hideStatusBar(this)
 
         val cardNumber = intent.getStringExtra("CARD_NUMBER")
         val expiryDate = intent.getStringExtra("EXPIRY_DATE")
@@ -51,6 +52,10 @@ class NfcDetailsActivity : AppCompatActivity() {
 
         binding.confirmButton.setOnClickListener {
             SdkActivityLauncher.saveResult(cardNumber, expiryDate, cardType)
+            finish()
+        }
+
+        binding.closeImage.setOnClickListener {
             finish()
         }
 

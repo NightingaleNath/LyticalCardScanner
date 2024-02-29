@@ -25,6 +25,7 @@ import com.codelytical.creditcardscanner.usecase.ExtractDataUseCase
 import com.codelytical.creditcardscanner.utils.CAMERA_PERMISSION
 import com.codelytical.creditcardscanner.utils.getCameraProvider
 import com.codelytical.creditcardscanner.utils.hasPermission
+import com.codelytical.creditcardscanner.utils.hideStatusBar
 import com.codelytical.creditcardscanner.utils.launchWhenResumed
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -44,9 +45,10 @@ class CreditCardScannerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityCreditCardScannerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        hideStatusBar(this)
+        
         cameraPermissions()
 
         binding.wocrIvFlashId.setOnClickListener {
@@ -57,10 +59,12 @@ class CreditCardScannerActivity : AppCompatActivity() {
             resetScanningProcess()
         }
 
+        binding.wocrIvClose.setOnClickListener {
+            finish()
+        }
+
         binding.wocrTvEnterCardNumberId.setOnClickListener {
-            val data = Intent()
-            data.putExtra("MANUAL_ENTRY_REQUESTED", true)
-            setResult(Activity.RESULT_OK, data)
+            
             finish()
         }
 

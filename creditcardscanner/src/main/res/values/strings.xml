@@ -14,4 +14,6 @@
     <string name="cardType">Card Type: </string>
     <string name="pinTry">Pin try limit: </string>
     <string name="extended_card_details">Extended card details</string>
+    <string name="confirm">Confirm</string>
+    <string name="card_representation">Card Representation</string>
 </resources>

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.codelytical.creditcardscanner.databinding.ActivityNfcReadBinding
 import com.codelytical.creditcardscanner.nfccard.parser.EmvTemplate
 import com.codelytical.creditcardscanner.provider.PcscProvider
+import com.codelytical.creditcardscanner.utils.hideStatusBar
 import java.io.IOException
 import java.time.LocalDate
 import java.time.ZoneId
@@ -33,11 +34,15 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityNfcReadBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        hideStatusBar(this)
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
+
+        binding.closeImage.setOnClickListener {
+            finish()
+        }
     }
 
     override fun onResume() {
