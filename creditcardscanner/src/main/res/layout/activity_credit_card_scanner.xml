@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:background="#000">
+
+    <RelativeLayout
+        android:id="@+id/wocr_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:visibility="visible">
+
+        <include
+            android:id="@+id/previewViewContainer"
+            layout="@layout/card_detection_layout" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/wocr_iv_refresh"
+            style="@style/wocr_FlashButton"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:src="@android:drawable/ic_menu_rotate"
+            tools:ignore="RtlHardcoded" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/wocr_iv_flash_id"
+            style="@style/wocr_FlashButton"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/wocr_ic_flash"
+            tools:ignore="RtlHardcoded" />
+
+        <com.codelytical.creditcardscanner.widgets.ButtonWithTopBorder
+            android:id="@+id/wocr_tv_enter_card_number_id"
+            style="@style/wocr_EnterManuallyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:text="@string/wocr_button_enter_card_number" />
+
+    </RelativeLayout>
+
+
+</FrameLayout>
