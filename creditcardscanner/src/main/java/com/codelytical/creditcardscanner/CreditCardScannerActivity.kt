@@ -64,7 +64,6 @@ class CreditCardScannerActivity : AppCompatActivity() {
         }
 
         binding.wocrTvEnterCardNumberId.setOnClickListener {
-            
             finish()
         }
 
