@@ -51,7 +51,7 @@ class NfcDetailsActivity : AppCompatActivity() {
         }
 
         binding.confirmButton.setOnClickListener {
-            SdkActivityLauncher.saveResult(cardNumber, expiryDate, cardType)
+            SdkActivityLauncher.saveResult(cardNumber, expiryDate, cardType, cardEdit = true)
             finish()
         }
 

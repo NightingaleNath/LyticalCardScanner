@@ -1,5 +1,6 @@
 package com.codelytical.creditcardscanner
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.nfc.NfcAdapter
@@ -18,12 +19,15 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codelytical.creditcardscanner.databinding.ActivityNfcReadBinding
+import com.codelytical.creditcardscanner.library.SdkActivityLauncher
+import com.codelytical.creditcardscanner.library.ViewToggleHelper
 import com.codelytical.creditcardscanner.nfccard.parser.EmvTemplate
 import com.codelytical.creditcardscanner.provider.PcscProvider
 import com.codelytical.creditcardscanner.utils.hideStatusBar
 import java.io.IOException
 import java.time.LocalDate
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class NfcReadActivity : AppCompatActivity(), ReaderCallback {
 
@@ -70,7 +74,8 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
     override fun onTagDiscovered(tag: Tag?) {
         runOnUiThread {
             progressDialog = ProgressDialog(this).apply {
-                setMessage("Reading NFC Tag...")
+                setTitle("Scanning ..")
+                setMessage("Please do not remove or move card during reading.")
                 setCancelable(false)
                 show()
             }
@@ -114,6 +119,10 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
             }
             Log.d("PaymentResultDate: ", date.toString())
 
+            val formatter = DateTimeFormatter.ofPattern("MM/yy")
+            val formattedDate = date.format(formatter)
+            Log.d("FormattedExpireDate: ", formattedDate)
+
             runOnUiThread {
                 progressDialog?.dismiss()
                // Navigate only if I can do that here
@@ -122,7 +131,7 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
                 val application = firstApplication.applicationLabel
                 val leftPinTry = firstApplication.leftPinTry
                 Log.d("PaymentResult: ", leftPinTry.toString())
-                onNfcReadSuccessful(cardNumber, date.toString(), card.type.getName(), aidString, application, leftPinTry)
+                handleViewSupport(cardNumber, formattedDate, card.type.getName(), aidString, application, leftPinTry)
             }
 
             //Log.d("PaymentResultCardNumber: ", card.bic)
@@ -175,5 +184,14 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
         }
         startActivity(detailsIntent)
         finish()
+    }
+
+    private fun handleViewSupport(cardNumber: String, expiryDate: String, cardType: String, aid: String, application: String, leftPinTry: Int) {
+        if (ViewToggleHelper.showIsDone) {
+            onNfcReadSuccessful(cardNumber, expiryDate, cardType, aid, application, leftPinTry)
+        } else {
+            SdkActivityLauncher.saveResult(cardNumber, expiryDate, cardType, cardEdit = true)
+            finish()
+        }
     }
 }

@@ -44,12 +44,13 @@ object SdkActivityLauncher {
         }
     }
 
-    fun saveResult(cardNumber: String?, expiryDate: String?, cardType: String?) {
+    fun saveResult(cardNumber: String?, expiryDate: String?, cardType: String?, cardEdit: Boolean = false) {
         // Notify callback with the result
         val resultBundle = Bundle().apply {
             putString("CARD_NUMBER", cardNumber)
             putString("EXPIRY_DATE", expiryDate)
             putString("CARD_TYPE", cardType)
+            putBoolean("CAN_EDIT", cardEdit)
         }
         callback?.onSdkResult(resultBundle)
 

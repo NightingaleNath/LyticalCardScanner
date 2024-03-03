@@ -42,20 +42,38 @@
             android:src="@drawable/wocr_ic_flash"
             tools:ignore="RtlHardcoded" />
 
-        <com.codelytical.creditcardscanner.widgets.ButtonWithTopBorder
-            android:id="@+id/wocr_tv_enter_card_number_id"
-            style="@style/wocr_EnterManuallyButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="true"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_gravity="bottom"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginBottom="0dp"
-            android:text="@string/wocr_button_enter_card_number" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            style="@style/wocr_EnterManuallyButton">
+
+            <com.codelytical.creditcardscanner.widgets.ButtonWithTopBorder
+                android:id="@+id/wocr_tv_enter_card_number_id"
+                style="@style/wocr_EnterManuallyButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="true"
+                android:focusable="true"
+                android:clickable="true"
+                android:text="@string/wocr_button_enter_card_number" />
+
+            <com.codelytical.creditcardscanner.widgets.ButtonWithTopBorder
+                android:id="@+id/wocr_tv_scan_nfc"
+                style="@style/wocr_EnterManuallyButton"
+                android:layout_width="0dp"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="true"
+                android:focusable="true"
+                android:clickable="true"
+                android:text="@string/nfc_scan" />
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 

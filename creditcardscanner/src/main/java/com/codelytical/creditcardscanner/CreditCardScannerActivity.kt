@@ -2,14 +2,16 @@ package com.codelytical.creditcardscanner
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.nfc.NfcAdapter
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
@@ -20,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.codelytical.creditcardscanner.databinding.ActivityCreditCardScannerBinding
 import com.codelytical.creditcardscanner.library.SdkActivityLauncher
+import com.codelytical.creditcardscanner.library.SdkActivityType
+import com.codelytical.creditcardscanner.library.ViewToggleHelper
 import com.codelytical.creditcardscanner.model.CardDetails
 import com.codelytical.creditcardscanner.usecase.ExtractDataUseCase
 import com.codelytical.creditcardscanner.utils.CAMERA_PERMISSION
@@ -64,6 +68,11 @@ class CreditCardScannerActivity : AppCompatActivity() {
         }
 
         binding.wocrTvEnterCardNumberId.setOnClickListener {
+            finish()
+        }
+
+        binding.wocrTvEnterCardNumberId.setOnClickListener {
+            SdkActivityLauncher.saveResult("", "", "", cardEdit = true)
             finish()
         }
 
@@ -163,15 +172,23 @@ class CreditCardScannerActivity : AppCompatActivity() {
 
         binding.previewViewContainer.wocrCardDetectionState.setRecognitionResult(card)
 
-        binding.previewViewContainer.confirmImage.visibility = View.VISIBLE
+        ViewToggleHelper.toggleViewSupport(binding.previewViewContainer.confirmImage)
 
-        binding.previewViewContainer.confirmImage.setOnClickListener {
-            returnResult(cardNumber, expiryDate)
+        if (ViewToggleHelper.showConfirm) {
+            binding.previewViewContainer.confirmImage.setOnClickListener {
+                returnResult(cardNumber, expiryDate)
+            }
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (!isFinishing) {
+                    returnResult(cardNumber, expiryDate)
+                }
+            }, 700)
         }
     }
 
     private fun returnResult(cardNumber: String?, expiryDate: String?) {
-        SdkActivityLauncher.saveResult(cardNumber, expiryDate, "")
+        SdkActivityLauncher.saveResult(cardNumber, expiryDate, "", cardEdit = true)
         finish()
     }
 

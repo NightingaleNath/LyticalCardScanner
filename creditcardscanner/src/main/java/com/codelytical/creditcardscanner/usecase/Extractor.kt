@@ -19,12 +19,15 @@ object Extractor {
     }
 
     private fun extractNumber(lines: List<String>): String? {
-        // Regular expression to match typical credit card number formats
-        val regex = Regex(pattern = """\b(?:\d{4}[ -]?){3}\d{4}\b|\b\d{4}[ -]?\d{6}[ -]?\d{5}\b""")
+        // Clean and prepare lines for processing
+        val cleanedLines = lines.map { it.replace(Regex("[^\\d -]"), "") }
+
+        // Regular expression to match a broad range of credit card number formats
+        val regex = Regex(pattern = """(?:\d[ -]?){13,19}\d""")
 
         // Search for a line that matches the credit card number pattern
-        val potentialNumbers = lines.mapNotNull { line ->
-            regex.find(line)?.value?.replace(Regex("[ -]"), "") // Remove spaces or dashes
+        val potentialNumbers = cleanedLines.mapNotNull { line ->
+            regex.find(line)?.value?.replace(Regex("[ -]"), "") // Normalize the number by removing spaces or dashes
         }
 
         // Validate extracted numbers using the Luhn algorithm and return the first valid one
@@ -37,6 +40,8 @@ object Extractor {
         val sum = digits.reversed().mapIndexed { index, n ->
             if (index % 2 == 1) (n * 2).let { if (it > 9) it - 9 else it } else n
         }.sum()
+        println("SUM NUMBER HERE: $sum")
+        println("SUM NUMBER HERE MOD: ${sum % 10}")
         return sum % 10 == 0
     }
 

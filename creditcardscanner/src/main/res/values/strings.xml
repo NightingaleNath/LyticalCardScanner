@@ -16,4 +16,5 @@
     <string name="extended_card_details">Extended card details</string>
     <string name="confirm">Confirm</string>
     <string name="card_representation">Card Representation</string>
+    <string name="nfc_scan">NFC Scan</string>
 </resources>
