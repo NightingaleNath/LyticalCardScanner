@@ -17,4 +17,9 @@
     <string name="confirm">Confirm</string>
     <string name="card_representation">Card Representation</string>
     <string name="nfc_scan">NFC Scan</string>
+
+    <string name="label_name">NFC Reader</string>
+    <string name="tap_your_card_to_the_back_of_your_nfc_phone">Tap your card to the back of your NFC phone.</string>
+    <string name="loading">Loading…</string>
+    <string name="amount_to_pay">Amount to pay</string>
 </resources>

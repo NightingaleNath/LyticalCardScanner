@@ -18,23 +18,27 @@ object SdkActivityLauncher {
         this.callback = listener
     }
 
+    fun isNfcSupported(context: Context): Boolean {
+        val nfcAdapter = NfcAdapter.getDefaultAdapter(context)
+        return nfcAdapter != null
+    }
+
     @ExperimentalGetImage
-    fun launchActivity(context: Context, activityType: SdkActivityType) {
+    fun launchActivity(context: Context, activityType: SdkActivityType, amount: String?) {
 
         when (activityType) {
             SdkActivityType.NFC_READER -> {
-                val nfcAdapter: NfcAdapter? = NfcAdapter.getDefaultAdapter(context)
-                if (nfcAdapter != null) {
-                    // NFC is available, proceed to launch NfcReadActivity
-                    context.startActivity(Intent(context, NfcReadActivity::class.java))
-                } else {
-                    // NFC is not available on this device, show an alert dialog
+                if (!isNfcSupported(context)) {
                     AlertDialog.Builder(context)
                         .setTitle("NFC Not Available")
                         .setMessage("NFC is not available on this device.")
                         .setPositiveButton("OK", null)
                         .show()
+                    return
                 }
+                val intent = Intent(context, NfcReadActivity::class.java)
+                intent.putExtra("amount", amount)
+                context.startActivity(intent)
             }
 
             SdkActivityType.CREDIT_CARD_SCANNER -> {
@@ -53,9 +57,7 @@ object SdkActivityLauncher {
             putBoolean("CAN_EDIT", cardEdit)
         }
         callback?.onSdkResult(resultBundle)
-
     }
-
 }
 
 

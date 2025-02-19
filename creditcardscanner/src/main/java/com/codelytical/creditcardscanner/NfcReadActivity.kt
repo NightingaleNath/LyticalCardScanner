@@ -1,6 +1,5 @@
 package com.codelytical.creditcardscanner
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.nfc.NfcAdapter
@@ -13,7 +12,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.Settings
 import android.util.Log
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -44,9 +42,13 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this)
 
+        val amount = intent.getStringExtra("amount")
+
         binding.closeImage.setOnClickListener {
             finish()
         }
+
+        binding.paymentAmount.text = amount
     }
 
     override fun onResume() {
@@ -81,42 +83,38 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
             }
         }
 
-        val isoDep: IsoDep?
         try {
-            isoDep = IsoDep.get(tag)
-            if (isoDep != null) {
-                (getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(
-                    VibrationEffect.createOneShot(
-                        150,
-                        10
-                    )
-                )
-            }
-            isoDep.connect()
+            val isoDep = IsoDep.get(tag) ?: throw IOException("IsoDep is null") // Ensure isoDep is not null
+            (getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(
+                VibrationEffect.createOneShot(150, 10)
+            )
+
+            isoDep.connect() // No error, as isoDep is guaranteed non-null
+
             val provider = PcscProvider()
-            provider.setmTagCom(isoDep)
+            provider.setmTagCom(isoDep) // No error, as isoDep is non-null
+
             val config = EmvTemplate.Config()
                 .setContactLess(true)
                 .setReadAllAids(true)
                 .setReadTransactions(true)
                 .setRemoveDefaultParsers(false)
                 .setReadAt(true)
+
             val parser = EmvTemplate.Builder()
                 .setProvider(provider)
                 .setConfig(config)
                 .build()
+
             val card = parser.readEmvCard()
             val cardNumber = card.cardNumber
             Log.d("PaymentResult: ", cardNumber)
 
-
             val expireDate = card.expireDate
-            var date = LocalDate.of(1999, 12, 31)
-            if (expireDate != null) {
-                date = expireDate.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
-            }
+            val date = expireDate?.toInstant()
+                ?.atZone(ZoneId.systemDefault())
+                ?.toLocalDate() ?: LocalDate.of(1999, 12, 31) // Safe handling of null expiration date
+
             Log.d("PaymentResultDate: ", date.toString())
 
             val formatter = DateTimeFormatter.ofPattern("MM/yy")
@@ -125,21 +123,21 @@ class NfcReadActivity : AppCompatActivity(), ReaderCallback {
 
             runOnUiThread {
                 progressDialog?.dismiss()
-               // Navigate only if I can do that here
-                val firstApplication = card.applications[0]
-                val aidString = firstApplication.aid.joinToString(separator = ",") { it.toUByte().toString() }
-                val application = firstApplication.applicationLabel
-                val leftPinTry = firstApplication.leftPinTry
-                Log.d("PaymentResult: ", leftPinTry.toString())
-                handleViewSupport(cardNumber, formattedDate, card.type.getName(), aidString, application, leftPinTry)
+                val firstApplication = card.applications.firstOrNull()
+                if (firstApplication != null) {
+                    val aidString = firstApplication.aid.joinToString(separator = ",") { it.toUByte().toString() }
+                    val application = firstApplication.applicationLabel
+                    val leftPinTry = firstApplication.leftPinTry
+                    Log.d("PaymentResult: ", leftPinTry.toString())
+                    handleViewSupport(cardNumber, formattedDate, card.type.getName(), aidString, application, leftPinTry)
+                }
             }
 
-            //Log.d("PaymentResultCardNumber: ", card.bic)
             Log.d("PaymentResult: ", card.type.getName())
-            Log.d("PaymentResult: ", "${card.applications[0].leftPinTry} ${card.cplc}")
+            Log.d("PaymentResult: ", "${card.applications.firstOrNull()?.leftPinTry} ${card.cplc}")
 
             try {
-                isoDep.close()
+                isoDep.close() // No error, as isoDep is non-null
             } catch (e: IOException) {
                 e.printStackTrace()
                 runOnUiThread { progressDialog?.dismiss() }

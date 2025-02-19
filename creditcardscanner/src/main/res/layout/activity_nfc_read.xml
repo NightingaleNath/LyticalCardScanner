@@ -5,48 +5,113 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
+    android:background="@color/indigo_500"
     tools:context=".NfcReadActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/closeImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            app:tint="#fff"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            android:contentDescription="@string/application" />
-
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/top_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="165dp"
-                android:src="@drawable/nfc"
+                android:id="@+id/closeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
                 app:tint="#fff"
-                android:contentDescription="@string/appbar_scrolling_view_behavior" />
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:contentDescription="@string/label_name" />
 
             <TextView
+                android:id="@+id/payment_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
-                android:fontFamily="sans-serif-black"
+                android:fontFamily="@font/roboto_medium"
                 android:textColor="#fff"
                 android:gravity="center"
-                android:text="@string/hold_your_nfc_card_to_the_back"
+                tools:text="GHS 3000.00"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/amountToPay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_below="@+id/payment_amount"
+                android:fontFamily="@font/roboto"
+                android:textColor="#fff"
+                android:gravity="center"
+                android:text="@string/amount_to_pay"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/nfc_animation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_below="@+id/top_container"
+            android:layout_above="@id/bottom_container"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                app:lottie_loop="true"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/nfc_card"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/card_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/maxresdefault"
+                android:contentDescription="@string/label_name" />
+
+            <TextView
+                android:id="@+id/nfc_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/montserrat"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center"
+                android:text="@string/tap_your_card_to_the_back_of_your_nfc_phone"
+                android:textColor="#fff"
                 android:textSize="17sp" />
 
         </LinearLayout>
