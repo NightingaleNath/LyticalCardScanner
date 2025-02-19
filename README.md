@@ -75,6 +75,13 @@ plugins {
 
 ```
 
+Set the gradle-wrapper.properties to 8.9 or higher:
+
+```
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.9-bin.zip
+
+```
+
 Step 3: Sync Your Project
 After adding the repository and dependency, sync your project with Gradle files to download the SDK.
 
